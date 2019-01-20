@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SinemaOtomasyon
@@ -10,9 +11,10 @@ namespace SinemaOtomasyon
     {
         static void Main(string[] args)
         {
-            Film film = new Film();
             Bilet bilet = new Bilet();
             bilet.BiletAlMenu();
+            //film.FilmCreate();
+            //film.FilmLog();
         }
     }
 }

@@ -1,1 +1,4 @@
-Robin Hood,119,3,emre uzun-metin taşlık,A1-A2
+Glass,110,2,hakan-okan,A1-A2
+Glass,110,2,emre uzun-hakan h,A3-A4
+Robin Hood,119,3,emre uzun,A2
+Aquamen,120,1,samet yamyam-yıldırım yam yam,E8-E7

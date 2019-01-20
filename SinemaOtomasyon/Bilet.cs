@@ -8,12 +8,15 @@ namespace SinemaOtomasyon
 {
     class Bilet : Film
     {
-        public string BiletNo { get; set; }
         public string[] AdSoyad { get; set; }
         public int KisiSayisi { get; set; }
         public string[] Koltuksecim { get; set; }
         public static List<Bilet> bilets = new List<Bilet>();
         string BiletDosyaYolu = @"D:\github-project\SinemaOtomasyon\SinemaOtomasyon\Biletler.txt";
+
+        /// <summary>
+        /// Filmler Listelenip seçilen filme göre
+        /// </summary>
         public void BiletAlMenu()
         {
             FilmleriCek();
@@ -29,14 +32,17 @@ namespace SinemaOtomasyon
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
+                        Console.Clear();
                         BiletAl(0);
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
+                        Console.Clear();
                         BiletAl(1);
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
+                        Console.Clear();
                         BiletAl(2);
                         break;
                     default:
@@ -45,13 +51,24 @@ namespace SinemaOtomasyon
                 }
             } while (true);
         }
+
+        /// <summary>
+        /// Film numarasına göre bilet değerlerin girildiği metod.
+        /// </summary>
+        /// <param name="filmno"></param>
         public void BiletAl(int filmno)
         {
             Bilet ybilet = new Bilet();
+            ybilet.BiletCek();
             Console.WriteLine($"Film Adı: {films[filmno].FilmAdı}\nSalon No: {films[filmno].SalonNo}\nSüre: {films[filmno].FilmSure} dk");
             Koltuk[] KoltukKontrol = films[filmno].koltuks;
             Console.WriteLine("Kaç Kişilik Bilet İstersiniz");
-            ybilet.KisiSayisi = int.Parse(Console.ReadLine());
+            int kisisayisi;
+            while (!int.TryParse(Console.ReadLine(), out kisisayisi))
+            {
+                Console.WriteLine("Lütfen Sayısal değer giriniz");
+            }
+            ybilet.KisiSayisi = kisisayisi;
             ybilet.AdSoyad = new string[ybilet.KisiSayisi];
             ybilet.Koltuksecim = new string[ybilet.KisiSayisi];
             bool koltukdolumu=false;
@@ -96,11 +113,13 @@ namespace SinemaOtomasyon
             BiletLog();
         }
 
+        /// <summary>
+        /// Bilets listesini
+        /// </summary>
         public void BiletLog()
         {
             using (StreamWriter strw = new StreamWriter(BiletDosyaYolu))
             {
-                
                 foreach (Bilet item in bilets)
                 {
                     strw.Write(item.FilmAdı + ",");
@@ -122,6 +141,38 @@ namespace SinemaOtomasyon
                             strw.Write(item.Koltuksecim[i] + "-");
                     }
                     strw.WriteLine();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Biletler.txt dosyasından okuduğu değerleri bilets listesinde uygun alanlara aktarır.
+        /// </summary>
+        public void BiletCek()
+        {
+            bilets.Clear();
+            int satirsayisi = File.ReadAllLines(BiletDosyaYolu).Length;
+
+            FileStream fs = new FileStream(BiletDosyaYolu, FileMode.Open);
+
+            using (StreamReader stread = new StreamReader(fs))
+            {
+                for (int i = 0; i < satirsayisi; i++)
+                {
+                    Bilet ybilet = new Bilet();
+                    string satir = stread.ReadLine();
+                    string[] satirdeger = satir.Split(',');
+                    for (int j = 0; j < satirdeger.Length; j++)
+                    {
+                        ybilet.FilmAdı = satirdeger[0];
+                        ybilet.FilmSure = int.Parse(satirdeger[1]);
+                        ybilet.SalonNo = int.Parse(satirdeger[2]);
+                        string[] okunanAdlar = satirdeger[3].Split('-');
+                        ybilet.AdSoyad = okunanAdlar;
+                        string[] okunanKoltuklar = satirdeger[4].Split('-');
+                        ybilet.Koltuksecim = okunanKoltuklar;
+                    }
+                    bilets.Add(ybilet);
                 }
             }
         }

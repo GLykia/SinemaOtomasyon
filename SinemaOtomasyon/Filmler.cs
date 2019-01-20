@@ -76,7 +76,7 @@ namespace SinemaOtomasyon
                     strw.Write(item.SalonNo + ",");
                     for (int i = 0; i < item.koltuks.Length; i++)
                     {
-                        if (i == item.koltuks.Length)
+                        if (i == item.koltuks.Length-1)
                             strw.Write(item.koltuks[i].KoltukS + "*" + item.koltuks[i].DoluBos);
                         else
                             strw.Write(item.koltuks[i].KoltukS + "*" + item.koltuks[i].DoluBos+"-");
@@ -140,6 +140,9 @@ namespace SinemaOtomasyon
             }
         }
 
+        /// <summary>
+        /// Filmleri txt dosyasından okuyup films listesine yükler
+        /// </summary>
         public void FilmleriCek()
         {
             films.Clear();
@@ -161,7 +164,7 @@ namespace SinemaOtomasyon
                         yfilm.SalonNo = int.Parse(satirdeger[2]);
                         string[] koltuks = satirdeger[3].Split('-');
                         Koltuk[] ykoltuk = new Koltuk[koltuks.Length];
-                        for (int k = 0; k < koltuks.Length-1; k++)
+                        for (int k = 0; k < koltuks.Length; k++)
                         {
                             ykoltuk[k].KoltukS = koltuks[k].Split('*')[0];
                             ykoltuk[k].DoluBos = Convert.ToBoolean(koltuks[k].Split('*')[1]);
